@@ -1,0 +1,29 @@
+.button{
+    -fx-background-color: #5e1010;
+    -fx-padding: 10;
+    -fx-font-family: 'Roboto', sans-serif;
+    -fx-font-size: 11px;
+    -fx-font-weight: 500;
+    -fx-color: #000;
+    -fx-border-style: none;
+    -fx-border-width: 0;
+    -fx-border-insets: 0;
+    -fx-border-radius: 45px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 7, 7);
+    -fx-cursor: hand;
+}
+
+.button:hover
+{
+    -fx-background-color: #7d1111;
+    -fx-padding: 10.5;
+    -fx-effect: dropshadow(three-pass-box, rgba(105, 22, 23, 1), 10, 0, 9, 11);
+
+}
+.button:pressed
+{
+    -fx-fill: black;
+    -fx-background-color: #7d1111;
+    -fx-padding: 9;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 5, 5);
+}

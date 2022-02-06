@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<GridPane alignment="CENTER" hgap="10" vgap="10" prefHeight="405" prefWidth="600" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.simonsejse.badmintonworldrecord.controllers.MainController">
+    <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>
+
+    <Label fx:id="playerOneLabel" text="Spiller 1" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+    <TextField fx:id="playerOneInput" promptText="Spillerens navn" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+
+
+    <Label fx:id="playerTwo" text="Spiller 2" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+    <TextField fx:id="playerTwoInput" promptText="Spillerens navn" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+
+    <Label fx:id="loadGameByIdLabel" text="Eller indlæs ved spil-id" GridPane.columnIndex="0" GridPane.rowIndex="7"/>
+    <TextField fx:id="loadByGameIdInput" promptText="Spil ID ved indlæsning" GridPane.columnIndex="0" GridPane.rowIndex="8"/>
+
+    <Button fx:id="startGameBtn" onMouseClicked="#startGame" text="Indlæs Spil" GridPane.columnIndex="0" GridPane.rowIndex="9"/>
+
+
+</GridPane>
