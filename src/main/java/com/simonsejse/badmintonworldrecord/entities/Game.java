@@ -1,5 +1,6 @@
 package com.simonsejse.badmintonworldrecord.entities;
 
+import com.simonsejse.badmintonworldrecord.constants.PlayerType;
 import jdk.jfr.Timestamp;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,8 +10,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
 @Entity
 @Table(name="game")
 public class Game {
@@ -53,12 +52,23 @@ public class Game {
 
     //Fandt 22:00
     @OneToMany(
-            fetch = FetchType.LAZY,
             mappedBy = "game",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private List<GameSet> sets;
+    private List<GameSet> sets = new ArrayList<>();
+
+    public Game addSet(GameSet gameSet){
+        sets.add(gameSet);
+        gameSet.setGame(this);
+        return this;
+    }
+
+    public Game removeSet(GameSet gameSet){
+        sets.remove(gameSet);
+        gameSet.setGame(null);
+        return this;
+    }
 
     @Column(name = "game_is_done")
     private boolean done;
@@ -72,7 +82,63 @@ public class Game {
         this.done = false;
     }
 
-    public void initSet(GameSet newSet) {
-        this.sets.add(newSet);
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void incrementBallsUsed(){
+        ballsUsed = ballsUsed + 1;
+    }
+    public int getBallsUsed() {
+        return ballsUsed;
+    }
+
+    public void setBallsUsed(int ballsUsed) {
+        this.ballsUsed = ballsUsed;
+    }
+
+    public Player getPlayerOne() {
+        return playerOne;
+    }
+
+    public void setPlayerOne(Player playerOne) {
+        this.playerOne = playerOne;
+    }
+
+    public Player getPlayerTwo() {
+        return playerTwo;
+    }
+
+    public void setPlayerTwo(Player playerTwo) {
+        this.playerTwo = playerTwo;
+    }
+
+    public LocalDateTime getWhenStarted() {
+        return whenStarted;
+    }
+
+    public void setWhenStarted(LocalDateTime whenStarted) {
+        this.whenStarted = whenStarted;
+    }
+
+    public List<GameSet> getSets() {
+        return sets;
+    }
+
+    public void setSets(List<GameSet> sets) {
+        this.sets = sets;
+    }
+
+    public boolean isDone() {
+        return done;
+    }
+
+    public void setDone(boolean done) {
+        this.done = done;
     }
 }

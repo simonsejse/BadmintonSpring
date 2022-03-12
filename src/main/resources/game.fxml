@@ -2,67 +2,78 @@
 
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="ap" prefHeight="600.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom,#ff0000, #ffffff);" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.simonsejse.badmintonworldrecord.controllers.GameController">
-   <Rectangle arcHeight="5.0" arcWidth="5.0" height="126.0" layoutX="14.0" layoutY="15.0" stroke="BLACK" strokeLineCap="ROUND" strokeMiterLimit="10000.0" width="306.0">
+<AnchorPane fx:id="ap" prefHeight="600.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom,#ff0000, #ffffff);" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.simonsejse.badmintonworldrecord.controllers.GameController">
+   <Rectangle arcHeight="5.0" arcWidth="5.0" height="150.0" layoutX="14.0" layoutY="15.0" stroke="BLACK" strokeLineCap="ROUND" strokeMiterLimit="10000.0" width="306.0">
       <fill>
-         <LinearGradient>
+         <LinearGradient endX="1.0" endY="1.0" startX="1.0">
             <stops>
                <Stop>
                   <color>
-                     <Color red="0.12460000067949295" green="0.2185480147600174" blue="0.8899999856948853" />
+                     <Color red="0.01315789483487606" green="0.009259259328246117" blue="0.009259259328246117" />
                   </color>
                </Stop>
-               <Stop offset="0.007662835249042145">
+               <Stop offset="0.007532956685499058">
                   <color>
-                     <Color red="0.12460000067949295" green="0.2185480147600174" blue="0.8899999856948853" />
+                     <Color red="0.2631579041481018" green="0.11330409348011017" blue="0.11330409348011017" />
+                  </color>
+               </Stop>
+               <Stop offset="0.3766478342749529">
+                  <color>
+                     <Color red="0.6184210777282715" green="0.15174220502376556" blue="0.15174220502376556" />
+                  </color>
+               </Stop>
+               <Stop offset="0.5877149309839744">
+                  <color>
+                     <Color red="1.0" />
                   </color>
                </Stop>
                <Stop offset="1.0">
                   <color>
-                     <Color red="1.0" green="1.0" blue="1.0" />
+                     <Color red="0.2763157784938812" green="0.1867690086364746" blue="0.1867690086364746" />
                   </color>
                </Stop>
             </stops>
          </LinearGradient>
       </fill>
    </Rectangle>
-   <Label fx:id="playerOneLabel" text="Magnus" textFill="WHITE" AnchorPane.leftAnchor="30" AnchorPane.topAnchor="50">
+   <Label fx:id="playerOneLabel" text="Magnus" textFill="WHITE" AnchorPane.leftAnchor="60" AnchorPane.topAnchor="40">
       <font>
          <Font name="Agency FB" size="20.0" />
       </font>
    </Label>
-   <Label fx:id="playerTwoLabel" text="Jonas" textFill="WHITE" AnchorPane.leftAnchor="30" AnchorPane.topAnchor="80">
+   <Label fx:id="playerTwoLabel" text="Jonas" textFill="WHITE" AnchorPane.leftAnchor="60" AnchorPane.topAnchor="70">
       <font>
          <Font name="Agency FB" size="20.0" />
       </font>
    </Label>
-   <Label fx:id="playerOneSetWonLabel" text="Set" textFill="WHITE" AnchorPane.leftAnchor="100" AnchorPane.topAnchor="50">
+   <Label fx:id="playerOneSetWonLabel" text="Set" textFill="WHITE" AnchorPane.leftAnchor="150" AnchorPane.topAnchor="40">
       <font>
          <Font name="Agency FB" size="20.0" />
       </font>
    </Label>
-   <Label fx:id="playerTwoSetWonLabel" text="Set" textFill="WHITE" AnchorPane.leftAnchor="100" AnchorPane.topAnchor="80">
+   <Label fx:id="playerTwoSetWonLabel" text="Set" textFill="WHITE" AnchorPane.leftAnchor="150" AnchorPane.topAnchor="70">
       <font>
          <Font name="Agency FB" size="20.0" />
       </font>
    </Label>
-   <Label fx:id="playerOneScoreLabel" text="score" textFill="WHITE" AnchorPane.leftAnchor="150" AnchorPane.topAnchor="50">
+   <Label fx:id="playerOneScoreLabel" text="score" textFill="WHITE" AnchorPane.leftAnchor="200" AnchorPane.topAnchor="40">
       <font>
          <Font name="Agency FB" size="20.0" />
       </font>
    </Label>
-   <Label fx:id="playerTwoScoreLabel" text="score" textFill="WHITE" AnchorPane.leftAnchor="150" AnchorPane.topAnchor="80">
+   <Label fx:id="playerTwoScoreLabel" text="score" textFill="WHITE" AnchorPane.leftAnchor="200" AnchorPane.topAnchor="70">
       <font>
          <Font name="Agency FB" size="20.0" />
       </font>
    </Label>
-   <HBox AnchorPane.leftAnchor="30" AnchorPane.topAnchor="110">
-      <Label text="Nuværende set  " textFill="WHITE">
+   <HBox AnchorPane.leftAnchor="60" AnchorPane.topAnchor="100">
+      <Label text="Antal sets   " textFill="WHITE">
          <font>
             <Font name="Agency FB" size="18.0" />
          </font></Label>
@@ -70,6 +81,18 @@
          <font>
             <Font name="Agency FB" size="18.0" />
          </font></Label>
+   </HBox>
+   <HBox AnchorPane.leftAnchor="60" AnchorPane.topAnchor="130">
+      <Label text="Antal bolde   " textFill="WHITE">
+         <font>
+            <Font name="Agency FB" size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="totalBalls" text="0" textFill="WHITE">
+         <font>
+            <Font name="Agency FB" size="18.0" />
+         </font>
+      </Label>
    </HBox>
 
    <Button onMouseClicked="#incrementPlayerOneBtn" stylesheets="@game.css" text="+1 til spiller 1" AnchorPane.rightAnchor="35" AnchorPane.topAnchor="15">
@@ -92,4 +115,24 @@
          <Font name="Agency FB" size="40.0" />
       </font>
    </Label>
+   <ImageView fx:id="testImage" fitHeight="23.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="25" AnchorPane.topAnchor="41">
+      <image>
+         <Image url="@images/flag.png" />
+      </image>
+   </ImageView>
+   <ImageView fitHeight="23.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="25" AnchorPane.topAnchor="71">
+       <image>
+          <Image url="@images/flag.png" />
+       </image>
+   </ImageView>
+   <ImageView fitHeight="23.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="25" AnchorPane.topAnchor="100">
+      <image>
+         <Image url="@images/totalsets.png" />
+      </image>
+   </ImageView>
+   <ImageView fitHeight="23.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="25" AnchorPane.topAnchor="130">
+      <image>
+         <Image url="@images/ball.png" />
+      </image>
+   </ImageView>
 </AnchorPane>

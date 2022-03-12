@@ -1,5 +1,6 @@
 package com.simonsejse.badmintonworldrecord.controllers;
 
+import com.simonsejse.badmintonworldrecord.dtos.BallsUsedDTO;
 import com.simonsejse.badmintonworldrecord.dtos.GameSetUpdateUiDTO;
 import com.simonsejse.badmintonworldrecord.exceptions.NoUndoHistoryFoundException;
 import com.simonsejse.badmintonworldrecord.management.StageManager;
@@ -15,6 +16,8 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -52,6 +55,9 @@ public class GameController implements Initializable {
     @FXML Label playerTwoScoreLabel;
     @FXML Label timerLabel;
     @FXML Label totalSets;
+    @FXML Label totalBalls;
+    @FXML
+    ImageView testImage;
 
     private long currentGameId;
     private LocalDateTime before;
@@ -66,17 +72,24 @@ public class GameController implements Initializable {
     }
 
     public void onKeyPressed(KeyEvent keyEvent) {
-        System.out.println("hi");
         switch(keyEvent.getCode()){
             case J: incrementPlayerScore(PlayerType.PLAYER1); break;
             case M: incrementPlayerScore(PlayerType.PLAYER2);break;
+            case F: revertLastPointGiven(); break;
+            case B: increaseBallAmount();
             default: break;
         }
+    }
+
+    private void increaseBallAmount() {
+        gameService.increaseBallsUsedByGameId(currentGameId, this);
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
+            if (testImage.getImage().isError()) testImage.getImage().getException().printStackTrace();
+
             final Game game = gameService.initGame(currentGameId);
             this.before = game.getWhenStarted();
             this.hasStarted = !game.isDone();
@@ -85,11 +98,14 @@ public class GameController implements Initializable {
             this.playerTwoLabel.setText(game.getPlayerTwo().getName());
             final GameSet currentGameSet = game.getSets().get(currentSet);
             this.totalSets.setText(String.valueOf(currentGameSet.getWhichSet()));
+            this.totalBalls.setText(String.valueOf(game.getBallsUsed()));
             playerOneScoreLabel.setText(String.valueOf(currentGameSet.getPlayerOneScore()));
             playerOneSetWonLabel.setText(String.valueOf(currentGameSet.getGame().getPlayerOne().getSetsWon()));
             playerTwoScoreLabel.setText(String.valueOf(currentGameSet.getPlayerTwoScore()));
             playerTwoSetWonLabel.setText(String.valueOf(currentGameSet.getGame().getPlayerTwo().getSetsWon()));
             timerLabel.setText(DateUtil.calculateDifferenceBetweenDates(LocalDateTime.now(), game.getWhenStarted()));
+
+
         } catch (GameNotFoundException e) {
             e.printStackTrace();
             System.out.println("TODO: Explode program!");
@@ -110,13 +126,18 @@ public class GameController implements Initializable {
     public void updateScoreUI(GameSetUpdateUiDTO gameSetUpdateUiDTO) {
         playerOneScoreLabel.setText(String.valueOf(gameSetUpdateUiDTO.getScore1()));
         playerTwoScoreLabel.setText(String.valueOf(gameSetUpdateUiDTO.getScore2()));
-        playerOneSetWonLabel.setText(String.valueOf(gameSetUpdateUiDTO.getSetWon1()));
-        playerTwoSetWonLabel.setText(String.valueOf(gameSetUpdateUiDTO.getSetWon2()));
-        if (gameSetUpdateUiDTO.getTotalSets() != null) totalSets.setText(String.valueOf(gameSetUpdateUiDTO.getTotalSets()));
+        if (gameSetUpdateUiDTO.getSetWon1() != null)
+            playerOneSetWonLabel.setText(String.valueOf(gameSetUpdateUiDTO.getSetWon1()));
+
+        if (gameSetUpdateUiDTO.getSetWon2() != null)
+            playerTwoSetWonLabel.setText(String.valueOf(gameSetUpdateUiDTO.getSetWon2()));
+
+        if (gameSetUpdateUiDTO.getTotalSets() != null)
+            totalSets.setText(String.valueOf(gameSetUpdateUiDTO.getTotalSets()));
     }
 
 
-    public void revertLastPointGiven(MouseEvent mouseEvent) {
+    public void revertLastPointGiven() {
         try {
             final PlayerType whichPlayerToRevert = undoManager.revertSelection(this.currentGameId);
             this.gameService.revertPlayerScoreByGameId(currentGameId, whichPlayerToRevert, this);
@@ -145,5 +166,9 @@ public class GameController implements Initializable {
      */
     public void incrementPlayerTwoBtn() {
         incrementPlayerScore(PlayerType.PLAYER2);
+    }
+
+    public void updateBallsUsedUI(BallsUsedDTO totalBalls) {
+        this.totalBalls.setText(String.valueOf(totalBalls.getBallsUsed()));
     }
 }

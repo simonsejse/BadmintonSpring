@@ -43,13 +43,15 @@ public class GameSet {
     @ManyToOne(fetch = FetchType.LAZY)
     private Player winningPlayer;
 
-    protected GameSet(){}
-
-    public GameSet(Game game){
-        this.game = game;
-        this.whichSet = game.getSets().size();
+    public GameSet(int whichSet){
+        this.whichSet = whichSet;
         this.playerOneScore = 0;
         this.playerTwoScore = 0;
+    }
+    protected GameSet(){}
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 
     public void incrementScore(PlayerType type){
@@ -90,7 +92,6 @@ public class GameSet {
 
 
     private boolean playerHasWon(PlayerType type){
-        System.out.println( (playerTwoScore >= 21 && (playerTwoScore - playerOneScore >= 2)));
         switch(type){
             case PLAYER1: return (playerOneScore >= 21 && (playerOneScore - playerTwoScore >= 2));
             case PLAYER2: return (playerTwoScore >= 21 && (playerTwoScore - playerOneScore >= 2));

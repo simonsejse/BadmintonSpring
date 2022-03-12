@@ -2,6 +2,7 @@ package com.simonsejse.badmintonworldrecord.services;
 
 import com.simonsejse.badmintonworldrecord.constants.PlayerType;
 import com.simonsejse.badmintonworldrecord.controllers.GameController;
+import com.simonsejse.badmintonworldrecord.dtos.BallsUsedDTO;
 import com.simonsejse.badmintonworldrecord.dtos.GameSetUpdateUiDTO;
 import com.simonsejse.badmintonworldrecord.entities.Game;
 import com.simonsejse.badmintonworldrecord.entities.GameSet;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -42,12 +45,10 @@ public class GameService {
                 .orElseThrow(
                         () -> new GameNotFoundException(String.format("Spil-id %d findes ikke!", currentGameId))
                 );
-        final List<GameSet> sets = game.getSets();
-        if (sets.isEmpty()) {
-            final GameSet firstSet = new GameSet(game);
-            sets.add(firstSet);
+        if (game.getSets().isEmpty()) {
+            final GameSet firstSet = new GameSet(0);
+            game.addSet(firstSet);
         }
-
         return game;
     }
 
@@ -64,12 +65,12 @@ public class GameService {
             //Setting winner
             currentSet.setWinnerAndIncrementPlayerWin(playerType);
             //Creating a new set so values go back to zero
-            final GameSet newSet = new GameSet(game);
-            game.initSet(newSet);
+            final GameSet newSet = new GameSet(game.getSets().size());
+            game.addSet(newSet);
 
             gameSetUpdateUiDTO = new GameSetUpdateUiDTO(newSet);
             gameSetUpdateUiDTO.setTotalSets(game.getSets().size() - 1);
-        }else gameSetUpdateUiDTO = new GameSetUpdateUiDTO(currentSet);
+        }else gameSetUpdateUiDTO = new GameSetUpdateUiDTO(currentSet.getPlayerOneScore(), currentSet.getPlayerTwoScore());
 
         gameController.updateScoreUI(gameSetUpdateUiDTO);
     }
@@ -78,10 +79,44 @@ public class GameService {
     @Transactional
     public void revertPlayerScoreByGameId(long gameId, PlayerType type, GameController gameController) throws GameNotFoundException {
         final Game game = getGameById(gameId);
-        final GameSet currentSet = game.getSets().get(game.getSets().size() - 1);
+        final int currentSetIndex = game.getSets().size() - 1;
+        final GameSet currentSet = game.getSets().get(currentSetIndex);
 
+        //Decrement score
+        //Check if player score of type is below zero if true:
+            //Then delete current set since it no longer needs to exist
+            //Then send back data from last set
+        //else:
+            //Then just send back current data
         currentSet.decrementScore(type);
 
+        GameSetUpdateUiDTO gameSetUpdateUiDTO = null;
+
+        if (currentSet.checkIfPlayerBelowZero(type)){
+            game.removeSet(currentSet);
+
+            final GameSet previousSet = game.getSets().get(currentSetIndex - 1);
+            previousSet.decrementScore(type);
+
+            if (type == PlayerType.PLAYER1) {
+                game.getPlayerOne().decrementSetsWon();
+            }else{
+                game.getPlayerTwo().decrementSetsWon();
+            }
+            gameSetUpdateUiDTO = new GameSetUpdateUiDTO(previousSet);
+            gameSetUpdateUiDTO.setTotalSets(game.getSets().size() - 1);
+        }else {
+            gameSetUpdateUiDTO = new GameSetUpdateUiDTO(currentSet.getPlayerOneScore(), currentSet.getPlayerTwoScore());
+        }
+
+
+        gameController.updateScoreUI(gameSetUpdateUiDTO);
     }
 
+    public void increaseBallsUsedByGameId(long currentGameId, GameController gameController) {
+        gameRepository.increaseBallsUsedByGameId(currentGameId);
+        final BallsUsedDTO ballsUsedDTOByGameId = gameRepository.getBallsUsedDTOByGameId(currentGameId);
+        //Update ball text
+        gameController.updateBallsUsedUI(ballsUsedDTOByGameId);
+    }
 }

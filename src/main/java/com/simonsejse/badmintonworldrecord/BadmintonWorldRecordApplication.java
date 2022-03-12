@@ -34,6 +34,7 @@ public class BadmintonWorldRecordApplication extends Application {
         primaryStage.setResizable(false);
         primaryStage.setTitle("Badminton-Verdensrekord");
         primaryStage.setScene(new Scene(rootNode, 600, 405));
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 

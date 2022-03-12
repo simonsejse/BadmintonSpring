@@ -39,7 +39,8 @@ public class StageManager {
         try {
             final Parent parent = fxmlLoader.load();
             parent.setOnKeyPressed(gameController::onKeyPressed);
-            final Scene scene = new Scene(parent, 600, 600);
+            final Scene scene = new Scene(parent, 514, 277);
+            stage.setResizable(false);
             stage.setScene(scene);
             stage.setTitle(String.format("Spil %d", newGame.getId()));
             window.hide();

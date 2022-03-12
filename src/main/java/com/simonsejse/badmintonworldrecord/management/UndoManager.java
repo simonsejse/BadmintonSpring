@@ -25,6 +25,7 @@ public class UndoManager {
         undoHistoryByGameId.compute(gameId, (id, currentUndoHistory) -> {
             if (currentUndoHistory == null) currentUndoHistory = new LinkedList<>();
             currentUndoHistory.addFirst(type);
+            if (currentUndoHistory.size() > 15) currentUndoHistory.removeLast();
             return currentUndoHistory;
         });
     }
